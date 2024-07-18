@@ -43,7 +43,7 @@ RUN apt-get update && \
         build-essential \
         wget \
         gnupg && \
-    curl -k -sL https://deb.nodesource.com/setup_6.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs && \
     apt-get autoremove --purge -y && \
     rm -rf /var/lib/apt/lists/*
