@@ -165,7 +165,7 @@ class MessageFactory
 
         $message = new Message();
         $message
-            ->setChannel('bureau')
+//            ->setChannel('bureau')
             ->setUsername('Assemblée Générale')
             ->setIconUrl('https://pbs.twimg.com/profile_images/600291061144145920/Lpf3TDQm_400x400.png')
         ;
