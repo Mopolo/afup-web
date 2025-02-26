@@ -740,3 +740,10 @@ services:
         arguments:
             $httpClient: '@app.meetup.http_client'
             $antennesCollection: '@AppBundle\Antennes\AntennesCollection'
+
+    PlanetePHP\GuzzleFeedClient: ~
+    PlanetePHP\FeedReader:
+        arguments:
+            $httpClient: '@PlanetePHP\GuzzleFeedClient'
+            $feedRepository: '@PlanetePHP\FeedRepository'
+            $feedArticleRepository: '@PlanetePHP\FeedArticleRepository'

@@ -27,6 +27,7 @@
     "j7mbo/twitter-api-php": "^1.0",
     "jms/serializer-bundle": "5.*",
     "knpuniversity/oauth2-client-bundle": "^1.4",
+    "laminas/laminas-feed": "^2.18",
     "league/iso3166": "^4.0",
     "league/oauth2-github": "^0.2.1",
     "nojimage/twitter-text-php": "1.1.*",
