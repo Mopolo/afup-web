@@ -96,6 +96,7 @@ phpstan:
 ##@ Frontend
 
 ### Compiler les assets pour la production
+.PHONY: assets
 assets:
 	./node_modules/.bin/webpack -p
 
