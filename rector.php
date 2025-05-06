@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
 
@@ -32,6 +33,10 @@ return RectorConfig::configure()
         SymfonySetList::SYMFONY_54,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-        TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE
+        TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
+        PHPUnitSetList::PHPUNIT_90,
+        PHPUnitSetList::PHPUNIT_100,
+        PHPUnitSetList::PHPUNIT_110,
+        PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])
 ;
