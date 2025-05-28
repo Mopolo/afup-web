@@ -388,11 +388,11 @@ services:
         tags:
             - { name: twig.extension }
 
-    AppBundle\Doctrine\ConnectionFactory: ~
-    Doctrine\DBAL\Connection:
-        factory: '@AppBundle\Doctrine\ConnectionFactory'
-        arguments:
-            $url: 'mysql://%database_user%:%database_password%@%database_host%:%database_port%/%database_name%?charset=utf8mb4'
+#    AppBundle\Doctrine\ConnectionFactory: ~
+#    Doctrine\DBAL\Connection:
+#        factory: '@AppBundle\Doctrine\ConnectionFactory'
+#        arguments:
+#            $url: 'mysql://%database_user%:%database_password%@%database_host%:%database_port%/%database_name%?charset=utf8mb4'
 
     AppBundle\Github\GithubClient:
         arguments:
