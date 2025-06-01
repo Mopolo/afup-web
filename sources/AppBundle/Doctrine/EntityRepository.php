@@ -12,7 +12,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 /**
- * @template TEntity of object
+ * @template T of object
  */
 abstract class EntityRepository extends Repository
 {
@@ -39,7 +39,7 @@ abstract class EntityRepository extends Repository
     }
 
     /**
-     * @param TEntity $entity
+     * @param T $entity
      */
     final public function save(object $entity): void
     {
@@ -48,7 +48,16 @@ abstract class EntityRepository extends Repository
     }
 
     /**
-     * @return ?TEntity
+     * @param T $entity
+     */
+    final public function delete(object $entity): void
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @return ?T
      */
     final public function find(int|string $id): ?object
     {
@@ -56,7 +65,7 @@ abstract class EntityRepository extends Repository
     }
 
     /**
-     * @return array<TEntity>
+     * @return array<T>
      */
     final public function findAll(): array
     {

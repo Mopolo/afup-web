@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller\Admin\Event;
 
+use AppBundle\Event\Entity\Room;
+use AppBundle\Event\Entity\RoomRepository;
 use Symfony\Component\Form\FormView;
 use AppBundle\Controller\Event\EventActionHelper;
 use AppBundle\Event\Form\RoomType;
 use AppBundle\Event\Form\Support\EventSelectFactory;
-use AppBundle\Event\Model\Repository\RoomRepository;
-use AppBundle\Event\Model\Room;
-use CCMBenchmark\Ting\Repository\CollectionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -31,19 +30,20 @@ class RoomAction extends AbstractController implements AdminActionWithEventSelec
         $id = $request->query->get('id');
 
         $event = $this->eventActionHelper->getEventById($id);
-        $rooms = $this->roomRepository->getByEvent($event);
+        $rooms = $this->roomRepository->findByEvent($event);
         $editForms = $this->getFormsForRooms($rooms);
 
         foreach ($editForms as $form) {
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+                /** @var Room $newRoom */
                 $room = $form->getData();
                 if ($request->request->has('delete')) {
                     $this->roomRepository->delete($room);
-                    $this->addFlash('notice', sprintf('La salle "%s" a été supprimée.', $room->getName()));
+                    $this->addFlash('notice', sprintf('La salle "%s" a été supprimée.', $room->name));
                 } else {
                     $this->roomRepository->save($room);
-                    $this->addFlash('notice', sprintf('La salle "%s" a été sauvegardée.', $room->getName()));
+                    $this->addFlash('notice', sprintf('La salle "%s" a été sauvegardée.', $room->name));
                 }
 
                 return $this->redirectToRoute('admin_event_room', [
@@ -52,16 +52,16 @@ class RoomAction extends AbstractController implements AdminActionWithEventSelec
             }
         }
 
-        $newRoom = new Room();
-        $newRoom->setEventId($event->getId());
+        $newRoom = new Room($event->getId());
 
         $addForm = $this->createForm(RoomType::class, $newRoom);
         $addForm->handleRequest($request);
 
         if ($addForm->isSubmitted() && $addForm->isValid()) {
+            /** @var Room $newRoom */
             $newRoom = $addForm->getData();
             $this->roomRepository->save($newRoom);
-            $this->addFlash('notice', sprintf('La salle "%s" a été ajoutée.', $newRoom->getName()));
+            $this->addFlash('notice', sprintf('La salle "%s" a été ajoutée.', $newRoom->name));
 
             return $this->redirectToRoute('admin_event_room', [
                 'id' => $event->getId(),
@@ -79,13 +79,14 @@ class RoomAction extends AbstractController implements AdminActionWithEventSelec
     }
 
     /**
+     * @param array<Room> $rooms
      * @return FormInterface[]
      */
-    private function getFormsForRooms(CollectionInterface $rooms): array
+    private function getFormsForRooms(array $rooms): array
     {
         $forms = [];
         foreach ($rooms as $room) {
-            $forms[] = $this->formFactory->createNamedBuilder('edit_room_' . $room->getId(), RoomType::class,
+            $forms[] = $this->formFactory->createNamedBuilder('edit_room_' . $room->id, RoomType::class,
                 $room)->getForm();
         }
 
