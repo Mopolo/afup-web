@@ -13,13 +13,7 @@ class TechnoWatchCalendarGenerator
         private readonly \DateTime $currentDate,
     ) {}
 
-    /**
-     * @param string $googleSpreadsheetCsvUrl
-     * @param $displayPrefix
-     *
-     * @return string
-     */
-    public function generate($googleSpreadsheetCsvUrl, $displayPrefix, $filter = null)
+    public function generate(string $googleSpreadsheetCsvUrl, bool $displayPrefix, ?string $filter = null): string
     {
         $eventLabelPrefix = $displayPrefix ? $this->name . " : " : "";
 
@@ -27,8 +21,8 @@ class TechnoWatchCalendarGenerator
         $vcalendar->add('X-WR-CALNAME', $this->name);
         foreach ($this->prepareEvents($googleSpreadsheetCsvUrl, $filter) as $event) {
             $vcalendar->add('VEVENT', [
-                'SUMMARY' => $eventLabelPrefix . $event['first_chair'] . " / " . $event['second_chair'],
-                'DTSTART;VALUE=DATE' => $event['date']->format('Ymd'),
+                'SUMMARY' => $eventLabelPrefix . $event->firstChair . " / " . $event->secondChair,
+                'DTSTART;VALUE=DATE' => $event->date->format('Ymd'),
                 'DESCRIPTION' => '',
                 'TRANSP' => 'TRANSPARENT',
             ]);
@@ -38,10 +32,9 @@ class TechnoWatchCalendarGenerator
     }
 
     /**
-     * @param $googleSpreadsheetCsvUrl
-     *
+     * @return array<TechnoWatchEvent>
      */
-    private function prepareEvents($googleSpreadsheetCsvUrl, $filter = null): array
+    private function prepareEvents(string $googleSpreadsheetCsvUrl, ?string $filter = null): array
     {
         $url = $googleSpreadsheetCsvUrl;
 
@@ -53,38 +46,30 @@ class TechnoWatchCalendarGenerator
         $events = [];
 
         while (false !== ($row = fgetcsv($fp))) {
-            if (trim((string) $row[0]) === '') {
+            $rawDate = trim((string) $row[0]);
+
+            if ($rawDate === '') {
                 continue;
             }
 
-            $date = \DateTimeImmutable::createFromFormat('d/m/Y', trim((string) $row[0]));
+            $date = \DateTimeImmutable::createFromFormat('d/m/Y', $rawDate);
 
-            if (false == $date) {
-                continue;
-            }
-
-            $date->setTime(0, 0, 0);
-
-            if ($date < $this->currentDate) {
+            if (false === $date || $date < $this->currentDate) {
                 continue;
             }
 
             $firstChair = trim((string) $row[4]);
             $secondChair = trim((string) $row[5]);
 
-            if (strlen((string) $filter) > 0 && ($firstChair != $filter && $secondChair != $filter)) {
+            if (strlen((string) $filter) > 0 && ($firstChair !== $filter && $secondChair !== $filter)) {
                 continue;
             }
 
-            if ($firstChair === '' || 0 == strlen($secondChair)) {
+            if ($firstChair === '' || $secondChair === '') {
                 continue;
             }
 
-            $events[] = [
-                'date' => $date,
-                'first_chair' => $row[4],
-                'second_chair' => $row[5],
-            ];
+            $events[] = new TechnoWatchEvent($date, $row[4], $row[5]);
         }
 
         return $events;
