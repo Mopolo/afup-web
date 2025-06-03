@@ -34,6 +34,7 @@ WHERE apag.date = :date
 AND apag.presence = '1' 
 SQL
         );
+
         $query->bindValue('date', $date->getTimestamp());
 
         return (int) $query->executeQuery()->fetchOne();
