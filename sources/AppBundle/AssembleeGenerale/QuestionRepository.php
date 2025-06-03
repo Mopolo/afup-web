@@ -35,7 +35,7 @@ final class QuestionRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function getAttendeeRaw(string $login, \DateTimeInterface $date)
+    public function getAttendeeRaw(string $login, \DateTimeInterface $date): Attendee
     {
         $statement = $this->prepare(<<<'SQL'
 SELECT
@@ -64,7 +64,7 @@ SQL
         return $this->mapOne(Attendee::class, $statement);
     }
 
-    public function getAttendee(string $login, \DateTimeInterface $date)
+    public function getAttendee(string $login, \DateTimeInterface $date): Attendee
     {
         $query = ($qb = $this->createQueryBuilder())
             ->select(
