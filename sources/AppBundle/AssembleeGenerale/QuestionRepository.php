@@ -24,7 +24,7 @@ final class QuestionRepository extends EntityRepository
     {
         $query = $this->createEntityQuery(
             ($qb = $this->createQueryBuilder())
-                ->select('*')
+                ->select('q.*')
                 ->from('afup_assemblee_generale_question', $this->alias())
                 ->where($qb->expr()->gt('q.opened_at', ':open'))
                 ->setParameter('open', new \DateTime('-2 years'))

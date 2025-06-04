@@ -7,7 +7,6 @@ namespace AppBundle\AssembleeGenerale;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 
-#[MappedSuperclass]
 final readonly class Attendee
 {
     public function __construct(
