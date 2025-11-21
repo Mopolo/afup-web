@@ -8,6 +8,7 @@ use Afup\Site\Droits;
 use AppBundle\Association\Form\ContactDetailsType;
 use AppBundle\Association\Model\Repository\UserRepository;
 use AppBundle\AuditLog\Audit;
+use AppBundle\Security\UserFinder;
 use AppBundle\Twig\ViewRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +21,13 @@ final class ContactDetailsAction extends AbstractController
         private readonly ViewRenderer $view,
         private readonly UserRepository $userRepository,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly Droits $droits,
+        private readonly UserFinder $userFinder,
         private readonly Audit $audit,
     ) {}
 
     public function __invoke(Request $request): Response
     {
-        $user = $this->userRepository->get($this->droits->obtenirIdentifiant());
+        $user = $this->userRepository->get($this->userFinder->currentUserId());
 
         $userForm = $this->createForm(ContactDetailsType::class, $user);
         $userForm->handleRequest($request);
