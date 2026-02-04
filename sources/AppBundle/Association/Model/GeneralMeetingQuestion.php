@@ -20,7 +20,7 @@ class GeneralMeetingQuestion implements NotifyPropertyInterface
      */
     private $id;
 
-    private ?\DateTimeInterface $date = null;
+    private ?\DateTimeImmutable $date = null;
 
     /**
      * @var string

@@ -119,7 +119,7 @@ SQL;
             ->addField([
                 'columnName' => 'date',
                 'fieldName' => 'date',
-                'type' => 'datetime',
+                'type' => 'datetime_immutable',
                 'serializer_options' => [
                     'unserialize' => ['unSerializeUseFormat' => true, 'format' => 'U'],
                     'serialize' => ['format' => 'U'],
