@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Indexation\Meetups;
 
+use AppBundle\Antennes\Antenne;
 use AppBundle\Antennes\AntenneRepository;
+use AppBundle\Antennes\Meetup as AntenneMeetup;
+use AppBundle\Antennes\Socials;
 use AppBundle\Event\Model\Meetup;
 use AppBundle\Indexation\Meetups\Transformer;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +16,27 @@ final class TransformerTest extends TestCase
 {
     public function testTransform(): void
     {
-        $transformer = new Transformer(new AntenneRepository());
+        $antenne = new Antenne();
+        $antenne->code = 'reims';
+        $antenne->label = 'Reims';
+        $antenne->logoUrl = '/images/offices/reims.svg';
+        $antenne->hideOnOfficesPage = false;
+        $antenne->departments = ['51'];
+
+        $meetup = new AntenneMeetup();
+        $meetup->urlName = 'afup-reims-php';
+        $meetup->id = '23255694';
+        $antenne->meetup = $meetup;
+
+        $socials = new Socials();
+        $socials->youtube = 'https://www.youtube.com/channel/UCmkMmVqrt7eI7YMZovew_xw';
+        $socials->twitter = 'afup_reims';
+        $antenne->socials = $socials;
+
+        $antenneRepository = $this->createMock(AntenneRepository::class);
+        $antenneRepository->method('findByCode')->with('reims')->willReturn($antenne);
+
+        $transformer = new Transformer($antenneRepository);
 
         $meetup = (new Meetup())
             ->setId('244992881')

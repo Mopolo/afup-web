@@ -36,8 +36,8 @@ final readonly class GetOneAction
             ],
             'links' => [
                 'meetup' => $this->createLink('https://www.meetup.com/fr-FR/', $antenne->meetup->urlName),
-                'linkedin' => $this->createLink('https://www.linkedin.com/company/', $antenne->socials->linkedin),
-                'bluesky' => $this->createLink('https://bsky.app/profile/', $antenne->socials->bluesky),
+                'linkedin' => $this->createLink('https://www.linkedin.com/company/', $antenne->socials?->linkedin),
+                'bluesky' => $this->createLink('https://bsky.app/profile/', $antenne->socials?->bluesky),
             ],
         ];
 

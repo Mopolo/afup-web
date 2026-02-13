@@ -4,12 +4,20 @@ declare(strict_types=1);
 
 namespace AppBundle\Antennes;
 
-final readonly class Map
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Embeddable]
+class Map
 {
-    public function __construct(
-        public bool $useSecondColor,
-        public LegendAttachment $legendAttachment,
-        public City $firstCity,
-        public ?City $secondCity = null,
-    ) {}
+    #[ORM\Column(nullable: true)]
+    public ?bool $useSecondColor = null;
+
+    #[ORM\Column(length: 10, nullable: true, enumType: LegendAttachment::class)]
+    public ?LegendAttachment $legendAttachment = null;
+
+    #[ORM\Embedded(class: City::class)]
+    public ?City $firstCity = null;
+
+    #[ORM\Embedded(class: City::class)]
+    public ?City $secondCity = null;
 }

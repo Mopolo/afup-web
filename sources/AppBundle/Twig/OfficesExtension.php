@@ -19,7 +19,7 @@ class OfficesExtension extends AbstractExtension
         return [
             new TwigFunction('office_name', fn($code): string => $this->antennesRepository->findByCode($code)->label),
             new TwigFunction('office_logo', fn($code): string => $this->antennesRepository->findByCode($code)->logoUrl),
-            new TwigFunction('office_meetup_urlname', fn($code) => $this->antennesRepository->findByCode($code)->meetup->urlName),
+            new TwigFunction('office_meetup_urlname', fn($code) => $this->antennesRepository->findByCode($code)->meetup?->urlName),
         ];
     }
 }

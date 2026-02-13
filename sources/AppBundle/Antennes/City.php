@@ -4,12 +4,20 @@ declare(strict_types=1);
 
 namespace AppBundle\Antennes;
 
-final readonly class City
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Embeddable]
+class City
 {
-    public function __construct(
-        public Point $firstPoint,
-        public Point $secondPoint,
-        public Point $thirdPoint,
-        public Position $position,
-    ) {}
+    #[ORM\Embedded(class: Point::class)]
+    public ?Point $firstPoint = null;
+
+    #[ORM\Embedded(class: Point::class)]
+    public ?Point $secondPoint = null;
+
+    #[ORM\Embedded(class: Point::class)]
+    public ?Point $thirdPoint = null;
+
+    #[ORM\Embedded(class: Position::class)]
+    public ?Position $position = null;
 }

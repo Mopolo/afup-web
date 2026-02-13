@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace AppBundle\Antennes;
 
-final readonly class Point
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Embeddable]
+class Point
 {
-    public function __construct(
-        public int $x,
-        public int $y,
-    ) {}
+    #[ORM\Column(nullable: true)]
+    public ?int $x = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?int $y = null;
 }

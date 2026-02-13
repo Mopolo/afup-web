@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace AppBundle\Tests\Indexation\Meetups;
 
+use AppBundle\Antennes\Antenne;
 use AppBundle\Antennes\AntenneRepository;
+use AppBundle\Antennes\Meetup as AntenneMeetup;
 use AppBundle\Indexation\Meetups\MeetupClient;
 use CuyZ\Valinor\MapperBuilder;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -16,12 +18,30 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class MeetupClientTest extends TestCase
 {
+    private function createAntenneRepository(): AntenneRepository
+    {
+        $antenne = new Antenne();
+        $antenne->code = 'lyon';
+        $antenne->label = 'Lyon';
+        $antenne->logoUrl = '/images/offices/lyon.svg';
+
+        $meetup = new AntenneMeetup();
+        $meetup->urlName = 'afup-lyon-php';
+        $meetup->id = '19630036';
+        $antenne->meetup = $meetup;
+
+        $repository = $this->createMock(AntenneRepository::class);
+        $repository->method('getAll')->willReturn(['lyon' => $antenne]);
+
+        return $repository;
+    }
+
     #[DataProvider('failureDataProvider')]
     public function testFailure(MockResponse $response, string $expectedExceptionMessage): void
     {
         $httpClient = $this->makeGuzzleMockClient($response);
 
-        $meetupClient = new MeetupClient($httpClient, new AntenneRepository(), new MapperBuilder());
+        $meetupClient = new MeetupClient($httpClient, $this->createAntenneRepository(), new MapperBuilder());
 
         self::expectException(\Exception::class);
         self::expectExceptionMessage($expectedExceptionMessage);
@@ -109,7 +129,7 @@ final class MeetupClientTest extends TestCase
             ),
         );
 
-        $meetupClient = new MeetupClient($httpClient, new AntenneRepository(), new MapperBuilder());
+        $meetupClient = new MeetupClient($httpClient, $this->createAntenneRepository(), new MapperBuilder());
 
         $antennes = $meetupClient->getEvents();
 

@@ -4,21 +4,43 @@ declare(strict_types=1);
 
 namespace AppBundle\Antennes;
 
-final readonly class Antenne
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: AntenneRepository::class)]
+#[ORM\Table(name: 'antennes')]
+class Antenne
 {
-    /**
-     * @param string[]|null $departments
-     * @param string[]|null $pays
-     */
-    public function __construct(
-        public string $code,
-        public string $label,
-        public ?Meetup $meetup,
-        public string $logoUrl,
-        public Socials $socials,
-        public ?Map $map,
-        public ?array $departments = null,
-        public ?array $pays = null,
-        public bool $hideOnOfficesPage = false,
-    ) {}
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    public ?int $id = null;
+
+    #[ORM\Column(length: 50, unique: true)]
+    public string $code;
+
+    #[ORM\Column(length: 100)]
+    public string $label;
+
+    #[ORM\Column(length: 255)]
+    public string $logoUrl;
+
+    #[ORM\Column]
+    public bool $hideOnOfficesPage = false;
+
+    /** @var string[]|null */
+    #[ORM\Column(type: 'json', nullable: true)]
+    public ?array $departments = null;
+
+    /** @var string[]|null */
+    #[ORM\Column(type: 'json', nullable: true)]
+    public ?array $pays = null;
+
+    #[ORM\Embedded(class: Meetup::class)]
+    public ?Meetup $meetup = null;
+
+    #[ORM\Embedded(class: Socials::class)]
+    public ?Socials $socials = null;
+
+    #[ORM\Embedded(class: Map::class)]
+    public ?Map $map = null;
 }

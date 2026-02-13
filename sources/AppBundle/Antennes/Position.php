@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace AppBundle\Antennes;
 
-final readonly class Position
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Embeddable]
+class Position
 {
-    public function __construct(
-        public float $latitude,
-        public float $longitude,
-    ) {}
+    #[ORM\Column(nullable: true)]
+    public ?float $latitude = null;
+
+    #[ORM\Column(nullable: true)]
+    public ?float $longitude = null;
 }

@@ -46,7 +46,7 @@ class Transformer
             'custom_sort' => $isUpcoming ? PHP_INT_MAX - $meetup->getDate()->getTimestamp() : $meetup->getDate()->getTimestamp(),
         ];
 
-        if ($antenne->socials->twitter !== null) {
+        if ($antenne->socials?->twitter !== null) {
             $item['twitter'] = $antenne->socials->twitter;
         }
 
