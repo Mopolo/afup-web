@@ -53,15 +53,15 @@
         {% if sheets|length > 0 %}
             {% for sheet in sheets %}
             <tr>
-                <td>{% if sheet.date != null %}{{ sheet.date|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if sheet.dateCreation != null %}{{ sheet.dateCreation|date('d-m-Y') }}{% endif %}</td>
                 <td style="white-space : normal;">
                     {{ sheet.nom }}
                     {% if sheet.image is not empty %}
-                        <br/><img src="../../templates/site/images/{{ sheet.image }}" alt="{{ sheet.image_alt|default('') }}" width="125" />
+                        <br/><img src="../../templates/site/images/{{ sheet.image }}" alt="{{ sheet.imageAlt|default('') }}" width="125" />
                     {% endif %}
                 </td>
-                <td>{% if sheet.date_debut_publication is not null %}{{ sheet.date_debut_publication|date('d-m-Y') }}{% endif %}</td>
-                <td>{% if sheet.date_fin_publication is not null %}{{ sheet.date_fin_publication|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if sheet.dateDebutPublication is not null %}{{ sheet.dateDebutPublication|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if sheet.dateFinPublication is not null %}{{ sheet.dateFinPublication|date('d-m-Y') }}{% endif %}</td>
                 <td class="center aligned">
                     {% if sheet.etat == 1 %}
                         <a class="ui orange label">En ligne</a>

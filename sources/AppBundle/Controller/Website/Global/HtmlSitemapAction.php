@@ -8,8 +8,8 @@ use Afup\Site\Corporate\Feuille;
 use AppBundle\Association\Model\Repository\CompanyMemberRepository;
 use AppBundle\Event\Model\Repository\TalkRepository;
 use AppBundle\Event\Model\Talk;
-use AppBundle\Site\Model\Repository\ArticleRepository;
-use AppBundle\Site\Model\Repository\SheetRepository;
+use AppBundle\Site\Entity\Repository\ArticleRepository;
+use AppBundle\Site\Entity\Repository\FeuilleRepository;
 use AppBundle\Twig\ViewRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ final class HtmlSitemapAction extends AbstractController
         private readonly CompanyMemberRepository $companyMemberRepository,
         private readonly ArticleRepository $articleRepository,
         private readonly TalkRepository $talkRepository,
-        private readonly SheetRepository $sheetRepository,
+        private readonly FeuilleRepository $feuilleRepository,
     ) {}
 
     public function __invoke(): Response
@@ -37,16 +37,16 @@ final class HtmlSitemapAction extends AbstractController
 
     private function buildLeafs(int $id): array
     {
-        $leafs = $this->sheetRepository->getActiveChildrenByParentId($id);
+        $leafs = $this->feuilleRepository->getFeuillesEnfant($id);
 
         $pages = [];
         foreach ($leafs as $leaf) {
-            if (!$leaf['lien'] || str_starts_with((string) $leaf['lien'], 'http')) {
+            if (!$leaf->lien || str_starts_with((string) $leaf->lien, 'http')) {
                 continue;
             }
             $pages[] = [
-                'name' => $leaf['nom'],
-                'url' => $leaf['lien'],
+                'name' => $leaf->nom,
+                'url' => $leaf->lien,
             ];
         }
 
@@ -82,7 +82,7 @@ final class HtmlSitemapAction extends AbstractController
             ]);
 
             $news[] = [
-                'name' => $newsItem->getTitle(),
+                'name' => $newsItem->titre,
                 'url' => $url,
             ];
         }
@@ -93,7 +93,7 @@ final class HtmlSitemapAction extends AbstractController
     private function talks(): array
     {
         $talks = [];
-        $talkList = $this->talkRepository->getAllPastTalks((new \DateTime())->setTime(29,59,59));
+        $talkList = $this->talkRepository->getAllPastTalks((new \DateTime())->setTime(29, 59, 59));
 
         /** @var Talk $talk */
         foreach ($talkList as $talk) {

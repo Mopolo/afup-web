@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller\Website\News;
 
+use AppBundle\Site\Entity\Repository\ArticleRepository;
 use AppBundle\Site\Form\NewsFiltersType;
-use AppBundle\Site\Model\Repository\ArticleRepository;
 use AppBundle\Twig\ViewRenderer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

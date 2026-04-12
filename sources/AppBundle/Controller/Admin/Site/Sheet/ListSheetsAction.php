@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Controller\Admin\Site\Sheet;
 
-use AppBundle\Site\Model\Repository\SheetRepository;
+use AppBundle\Site\Entity\Repository\FeuilleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -12,7 +12,7 @@ use Twig\Environment;
 class ListSheetsAction
 {
     public function __construct(
-        private readonly SheetRepository $sheetRepository,
+        private readonly FeuilleRepository $feuilleRepository,
         private readonly Environment $twig,
     ) {}
 
@@ -26,7 +26,7 @@ class ListSheetsAction
         }
         $direction = $request->query->get('direction', 'desc');
         $filter = $request->query->get('filter', '');
-        $sheets = $this->sheetRepository->getAllSheets($sort, $direction, $filter);
+        $sheets = $this->feuilleRepository->getAllFeuilles($sort, $direction, $filter);
 
         return new Response($this->twig->render('admin/site/sheet_list.html.twig', [
             'sheets' => $sheets,

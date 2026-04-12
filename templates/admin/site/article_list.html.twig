@@ -68,9 +68,9 @@
                         <td>{{ article.theme ? enum('AppBundle\\Site\\Enum\\ArticleTheme').from(article.theme).label : '' }}</td>
                         <td>{{ article.nom_forum }}</td>
                         <td class="center aligned">
-                            {% if article.etat == 1 %}
+                            {% if article.etat == enum('AppBundle\\Site\\Enum\\ArticleEtat').EnLigne.value %}
                                 <a class="ui orange label">En ligne</a>
-                            {% elseif article.etat == -1 %}
+                            {% elseif article.etat == enum('AppBundle\\Site\\Enum\\ArticleEtat').HorsLigne.value %}
                                 <a class="ui grey label">Hors ligne</a>
                             {% else %}
                                 <a class="ui violet label">En attente</a>

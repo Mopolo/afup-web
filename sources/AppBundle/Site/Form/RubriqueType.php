@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AppBundle\Site\Form;
 
 use AppBundle\Association\Model\Repository\UserRepository;
-use AppBundle\Site\Model\Repository\RubriqueRepository;
-use AppBundle\Site\Model\Repository\SheetRepository;
+use AppBundle\Site\Entity\Repository\FeuilleRepository;
+use AppBundle\Site\Entity\Repository\RubriqueRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -24,7 +24,7 @@ class RubriqueType extends AbstractType
     public function __construct(
         private readonly RubriqueRepository $rubriqueRepository,
         private readonly UserRepository $userRepository,
-        private readonly SheetRepository $sheetRepository,
+        private readonly FeuilleRepository $feuilleRepository,
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -34,17 +34,17 @@ class RubriqueType extends AbstractType
             $users[$user->getLastName() . ' ' . $user->getFirstName()] = $user->getId();
         }
         $sheets = [];
-        foreach ($this->sheetRepository->getAll() as $sheet) {
-            $sheets[$sheet->getName()] = $sheet->getId();
+        foreach ($this->feuilleRepository->findAll() as $feuille) {
+            $sheets[$feuille->nom] = $feuille->id;
         }
         ksort($sheets, SORT_NATURAL);
         $positions = [];
-        for ($i = self::POSITIONS_RUBRIQUES ; $i >= -(self::POSITIONS_RUBRIQUES); $i--) {
+        for ($i = self::POSITIONS_RUBRIQUES; $i >= -(self::POSITIONS_RUBRIQUES); $i--) {
             $positions[$i] = $i;
         }
         $rubriques = [];
-        foreach ($this->rubriqueRepository->getAll() as $rubrique) {
-            $rubriques[$rubrique->getNom()] = $rubrique->getId();
+        foreach ($this->rubriqueRepository->findAll() as $rubrique) {
+            $rubriques[$rubrique->nom] = $rubrique->id;
         }
         $builder
             ->add('nom', TextType::class, [

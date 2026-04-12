@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AppBundle\Site\Form;
 
+use AppBundle\Site\Entity\Repository\ArticleRepository;
 use AppBundle\Site\Enum\ArticleTheme;
-use AppBundle\Site\Model\Repository\ArticleRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
